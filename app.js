@@ -1,7 +1,9 @@
+// get user input from form
 document
   .querySelector("#destination_details_form")
   .addEventListener("submit", handleFormSubmit);
 
+// handle the submit action on the form
 function handleFormSubmit(event) {
   event.preventDefault();
 
@@ -12,6 +14,7 @@ function handleFormSubmit(event) {
 
   resetFormValues(event.target);
 
+  // create card based on the form
   let destinationCard = createDestinationCard(
     destinationName,
     destinationLocation,
@@ -25,6 +28,7 @@ function handleFormSubmit(event) {
     document.querySelector("#title").innerHTML = "My WishList";
   }
 
+  // append card to right side div
   document
     .querySelector("#destinations_container")
     .appendChild(destinationCard);
@@ -36,6 +40,7 @@ function resetFormValues(form) {
   }
 }
 
+// create card function
 function createDestinationCard(name, location, photoUrl, description) {
   let card = document.createElement("div");
   card.setAttribute("class", "card");
@@ -47,6 +52,14 @@ function createDestinationCard(name, location, photoUrl, description) {
   img.setAttribute("class", "card-img-top");
   img.setAttribute("alt", name);
 
+  fetch(
+    `https://api.unsplash.com/search/photos?query=${photoUrl}&per_page=1&client_id=f7fuAgn6T4Tm_2ab-N2xanQaCLEA2Cek3wKs2RFZTyE`
+  )
+    .then((res) => res.json())
+    .then((data) => (imgData = data.results[0].urls.raw))
+    .then(() => console.log(imgData));
+
+  // set default pic
   let constantPhotoUrl =
     "https://cavchronicle.org/wp-content/uploads/2018/03/top-travel-destination-for-visas-900x504.jpg";
   if (photoUrl.length === 0) {
@@ -55,6 +68,17 @@ function createDestinationCard(name, location, photoUrl, description) {
     img.setAttribute("src", photoUrl);
   }
 
+  // https://api.unsplash.com/search/photos?query=paris&per_page=1&client_id=f7fuAgn6T4Tm_2ab-N2xanQaCLEA2Cek3wKs2RFZTyE
+
+  // get user input for photo search
+
+  // get photo from unsplash api
+
+  // return first photo in keyword search
+
+  // append that photo instead of user uploaded photo
+
+  // append img to card div
   card.appendChild(img);
 
   let cardBody = document.createElement("div");
@@ -130,3 +154,14 @@ function removeDestination(event) {
   let card = cardBody.parentElement;
   card.remove();
 }
+
+// const apiPhoto = fetch(
+//   "https://api.unsplash.com/search/photos?query=paris&per_page=1&client_id=f7fuAgn6T4Tm_2ab-N2xanQaCLEA2Cek3wKs2RFZTyE"
+// );
+
+// fetch(
+//   `https://api.unsplash.com/search/photos?query=${photoUrl}&per_page=1&client_id=f7fuAgn6T4Tm_2ab-N2xanQaCLEA2Cek3wKs2RFZTyE`
+// )
+//   .then((res) => res.json())
+//   .then((data) => (imgData = data.results[0].urls.raw))
+//   .then(() => console.log(imgData));
