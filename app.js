@@ -1,7 +1,20 @@
 // get user input from form
+
 document
   .querySelector("#destination_details_form")
   .addEventListener("submit", handleFormSubmit);
+
+async function getPic(imgData) {
+  return await fetch(
+    `https://api.unsplash.com/search/photos?query=${imgData}&per_page=1&client_id=f7fuAgn6T4Tm_2ab-N2xanQaCLEA2Cek3wKs2RFZTyE`
+  )
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data.results[0].urls.thumb);
+      return data.results[0].urls.thumb;
+    });
+  // .then(() => console.log(imgData));
+}
 
 // handle the submit action on the form
 function handleFormSubmit(event) {
@@ -52,21 +65,17 @@ function createDestinationCard(name, location, photoUrl, description) {
   img.setAttribute("class", "card-img-top");
   img.setAttribute("alt", name);
 
-  fetch(
-    `https://api.unsplash.com/search/photos?query=${photoUrl}&per_page=1&client_id=f7fuAgn6T4Tm_2ab-N2xanQaCLEA2Cek3wKs2RFZTyE`
-  )
-    .then((res) => res.json())
-    .then((data) => (imgData = data.results[0].urls.raw))
-    .then(() => console.log(imgData));
-
   // set default pic
   let constantPhotoUrl =
     "https://cavchronicle.org/wp-content/uploads/2018/03/top-travel-destination-for-visas-900x504.jpg";
-  if (photoUrl.length === 0) {
-    img.setAttribute("src", constantPhotoUrl);
-  } else {
-    img.setAttribute("src", photoUrl);
-  }
+
+  getPic(name).then((imgUrl) => {
+    if (photoUrl.length === 0) {
+      img.setAttribute("src", imgUrl);
+    } else {
+      img.setAttribute("src", photoUrl);
+    }
+  });
 
   // https://api.unsplash.com/search/photos?query=paris&per_page=1&client_id=f7fuAgn6T4Tm_2ab-N2xanQaCLEA2Cek3wKs2RFZTyE
 
